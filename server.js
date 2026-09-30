@@ -4,34 +4,17 @@ const path = require("path");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// --------------------------------------------------
-// HZR CONFIG
-// --------------------------------------------------
-
 const HZR_HEADER = "𝕳𝖅𝕽𝟏⁹";
 
-// JSON body
-app.use(express.json());
-
-// Serve website
+app.use(express.json({ limit: "50kb" }));
 app.use(express.static(path.join(__dirname)));
-
-// --------------------------------------------------
-// MAIN PAGE
-// --------------------------------------------------
 
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "index.html"));
 });
 
-// --------------------------------------------------
-// HZR LOCATION API
-// --------------------------------------------------
-
 app.post("/api/location", async (req, res) => {
-
     try {
-
         const {
             id,
             latitude,
@@ -41,38 +24,52 @@ app.post("/api/location", async (req, res) => {
             userAgent
         } = req.body;
 
-        // Basic validation
+        // Validate required data
         if (
-            !id ||
+            typeof id !== "string" ||
+            !id.trim() ||
             typeof latitude !== "number" ||
-            typeof longitude !== "number"
+            !Number.isFinite(latitude) ||
+            typeof longitude !== "number" ||
+            !Number.isFinite(longitude)
         ) {
             return res.status(400).json({
                 success: false,
-                message: "Invalid location data"
+                whatsapp: false,
+                message: "Invalid location data."
             });
         }
 
         const now = new Date();
 
-        const date =
-            String(now.getFullYear()) + "-" +
-            String(now.getMonth() + 1).padStart(2, "0") + "-" +
-            String(now.getDate()).padStart(2, "0");
+        const receivedDate =
+            String(now.getDate()).padStart(2, "0") +
+            " " +
+            now.toLocaleString("en-US", {
+                month: "long"
+            }) +
+            " " +
+            now.getFullYear();
 
-        const time =
-            String(now.getHours()).padStart(2, "0") + ":" +
-            String(now.getMinutes()).padStart(2, "0") + ":" +
+        const receivedTime =
+            String(now.getHours()).padStart(2, "0") +
+            ":" +
+            String(now.getMinutes()).padStart(2, "0") +
+            ":" +
             String(now.getSeconds()).padStart(2, "0");
 
+        const accuracyText =
+            typeof accuracy === "number" && Number.isFinite(accuracy)
+                ? accuracy.toFixed(1) + " m"
+                : "Unknown";
+
+        const deviceText =
+            typeof device === "string" && device.trim()
+                ? device.trim()
+                : "Unknown";
 
         const mapsUrl =
             `https://maps.google.com/?q=${latitude},${longitude}`;
-
-
-        // --------------------------------------------------
-        // WHATSAPP MESSAGE
-        // --------------------------------------------------
 
         const whatsappMessage = `
 ━━━━━━━━━━━━━━━━━━
@@ -85,79 +82,70 @@ ${HZR_HEADER}
 ${id}
 
 📱 DEVICE
-${device || "Unknown"}
+${deviceText}
 
 🌐 LOCATION
 Latitude: ${latitude.toFixed(6)}
 Longitude: ${longitude.toFixed(6)}
-Accuracy: ${accuracy ? Number(accuracy).toFixed(1) + " m" : "Unknown"}
+Accuracy: ${accuracyText}
 
 🗺️ GOOGLE MAPS
 ${mapsUrl}
 
 🕐 RECEIVED
-${date}
-${time}
+${receivedDate}
+${receivedTime}
 
 ━━━━━━━━━━━━━━━━━━
 RECIEVED FROM HZR
 ━━━━━━━━━━━━━━━━━━
 `.trim();
 
+        console.log("\n================================");
+        console.log("NEW HZR LOCATION");
+        console.log("================================");
+        console.log("ID:", id);
+        console.log("Latitude:", latitude);
+        console.log("Longitude:", longitude);
+        console.log("Accuracy:", accuracyText);
+        console.log("Device:", deviceText);
+        console.log("User-Agent:", userAgent || "Unknown");
+        console.log("================================");
 
-        console.log("\n==============================");
-        console.log(HZR_HEADER);
-        console.log("New location received");
-        console.log("==============================");
-        console.log(whatsappMessage);
-        console.log("==============================\n");
-
-
-        // --------------------------------------------------
-        // WHATSAPP CLOUD API
-        // --------------------------------------------------
-
+        // WhatsApp configuration
         const accessToken = process.env.WHATSAPP_ACCESS_TOKEN;
         const phoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID;
         const recipientNumber = process.env.WHATSAPP_RECIPIENT_NUMBER;
-
-        /*
-         * If WhatsApp credentials are not configured,
-         * return success for testing without sending.
-         */
 
         if (
             !accessToken ||
             !phoneNumberId ||
             !recipientNumber
         ) {
+            console.error(
+                "WhatsApp environment variables are missing."
+            );
 
-            return res.json({
-                success: true,
+            return res.status(500).json({
+                success: false,
                 whatsapp: false,
-                message: "Location received. WhatsApp is not configured yet."
+                message: "WhatsApp is not configured on the server."
             });
-
         }
 
-
+        // Send message through WhatsApp Cloud API
         const whatsappResponse = await fetch(
             `https://graph.facebook.com/v23.0/${phoneNumberId}/messages`,
             {
                 method: "POST",
-
                 headers: {
                     "Authorization": `Bearer ${accessToken}`,
                     "Content-Type": "application/json"
                 },
-
                 body: JSON.stringify({
                     messaging_product: "whatsapp",
-
                     to: recipientNumber,
-
                     type: "text",
-
                     text: {
                         preview_url: true,
                         body: whatsappMessage
@@ -166,72 +154,77 @@ RECIEVED FROM HZR
             }
         );
 
-
         const whatsappData = await whatsappResponse.json();
 
-
         if (!whatsappResponse.ok) {
-
             console.error(
-                "WhatsApp API Error:",
-                whatsappData
+                "================================"
+            );
+            console.error("WHATSAPP API ERROR");
+            console.error(
+                JSON.stringify(whatsappData, null, 2)
+            );
+            console.error(
+                "================================"
             );
 
             return res.status(502).json({
                 success: false,
                 whatsapp: false,
-                message: "WhatsApp server did not respond correctly."
+                message: "WhatsApp message was not sent.",
+                error: whatsappData
             });
-
         }
 
+        console.log(
+            "================================"
+        );
+        console.log("WHATSAPP MESSAGE SENT");
+        console.log(
+            JSON.stringify(whatsappData, null, 2)
+        );
+        console.log(
+            "================================\n"
+        );
 
         return res.json({
             success: true,
             whatsapp: true,
-            message: "Location received successfully.",
+            message: "Location sent successfully.",
             id: id
         });
 
-
     } catch (error) {
-
-        console.error("Server Error:", error);
+        console.error(
+            "================================"
+        );
+        console.error("SERVER ERROR");
+        console.error(error);
+        console.error(
+            "================================"
+        );
 
         return res.status(500).json({
             success: false,
-            message: "Server didn't respond"
+            whatsapp: false,
+            message: "Server didn't respond."
         });
-
     }
-
 });
 
-
-// --------------------------------------------------
 // 404
-// --------------------------------------------------
-
 app.use((req, res) => {
-
     res.status(404).json({
         success: false,
         message: "Not Found"
     });
-
 });
 
-
-// --------------------------------------------------
-// START SERVER
-// --------------------------------------------------
-
+// Start server
 app.listen(PORT, () => {
-
     console.log("================================");
     console.log(HZR_HEADER);
     console.log("HZR SERVER STARTED");
-    console.log(`Port: ${PORT}`);
+    console.log("Port:", PORT);
     console.log("================================");
-
 });
