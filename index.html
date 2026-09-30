@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#050708">
+
+<title>HZR</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    background:
+        radial-gradient(circle at 50% 15%, #102b35 0%, #050708 45%, #000 100%);
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.container {
+    width: min(92%, 430px);
+    text-align: center;
+}
+
+.logo {
+    font-size: 43px;
+    font-weight: 800;
+    letter-spacing: 7px;
+    color: #19e6c1;
+    text-shadow: 0 0 25px rgba(25,230,193,.35);
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    color: #718084;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 35px;
+}
+
+.panel {
+    background: rgba(8,14,16,.90);
+    border: 1px solid rgba(25,230,193,.15);
+    border-radius: 22px;
+    padding: 30px 24px;
+    box-shadow:
+        0 20px 70px rgba(0,0,0,.55),
+        inset 0 0 35px rgba(25,230,193,.025);
+}
+
+.status {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 25px;
+}
+
+.lines {
+    text-align: left;
+}
+
+.line {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    color: #566467;
+    font-size: 13px;
+    margin: 15px 0;
+    transition: .35s;
+}
+
+.line.active {
+    color: #dce5e6;
+}
+
+.line.done {
+    color: #19e6c1;
+}
+
+.dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #344245;
+    flex-shrink: 0;
+}
+
+.line.active .dot {
+    background: #19e6c1;
+    box-shadow: 0 0 12px #19e6c1;
+    animation: pulse 1s infinite;
+}
+
+.line.done .dot {
+    background: #19e6c1;
+}
+
+@keyframes pulse {
+    50% {
+        opacity: .35;
+        transform: scale(.75);
+    }
+}
+
+.loader {
+    width: 34px;
+    height: 34px;
+    border: 3px solid rgba(255,255,255,.08);
+    border-top-color: #19e6c1;
+    border-radius: 50%;
+    margin: 28px auto 5px;
+    animation: spin .8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.error {
+    display: none;
+}
+
+.error-title {
+    color: #ffffff;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.error-text {
+    color: #788588;
+    font-size: 13px;
+    line-height: 1.7;
+    margin-bottom: 24px;
+}
+
+.retry {
+    width: 100%;
+    height: 48px;
+    border: 0;
+    border-radius: 13px;
+    background: #19e6c1;
+    color: #00110d;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.retry:active {
+    transform: scale(.97);
+}
+
+.retry:disabled {
+    background: #202a2c;
+    color: #5d696b;
+    cursor: not-allowed;
+}
+
+.permission-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background: rgba(0,0,0,.88);
+    backdrop-filter: blur(12px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 22px;
+}
+
+.permission-box {
+    width: min(100%, 390px);
+    background: #090f11;
+    border: 1px solid rgba(25,230,193,.2);
+    border-radius: 22px;
+    padding: 30px 24px;
+    text-align: center;
+    box-shadow: 0 25px 80px rgba(0,0,0,.7);
+}
+
+.permission-icon {
+    width: 58px;
+    height: 58px;
+    border-radius: 17px;
+    background: rgba(25,230,193,.08);
+    border: 1px solid rgba(25,230,193,.18);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    font-size: 25px;
+    color: #19e6c1;
+}
+
+.permission-title {
+    font-size: 21px;
+    margin-bottom: 12px;
+}
+
+.permission-text {
+    color: #7b898b;
+    font-size: 13px;
+    line-height: 1.8;
+    margin-bottom: 24px;
+}
+
+.continue {
+    width: 100%;
+    height: 48px;
+    border: 0;
+    border-radius: 13px;
+    background: #19e6c1;
+    color: #00110d;
+    font-weight: 800;
+    letter-spacing: 1px;
+    cursor: pointer;
+}
+
+.main-content {
+    display: none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="permission-overlay" id="permissionOverlay">
+
+    <div class="permission-box">
+
+        <div class="permission-icon">✓</div>
+
+        <div class="permission-title">
+            ACCESS REQUIRED
+        </div>
+
+        <div class="permission-text">
+            Please allow the required access
+            to continue.
+            <br><br>
+            If your device asks for permission,
+            please select <b>Allow</b>.
+        </div>
+
+        <button class="continue" id="continueBtn">
+            CONTINUE
+        </button>
+
+    </div>
+
+</div>
+
+
+<div class="container">
+
+    <div class="logo">HZR</div>
+
+    <div class="subtitle">
+        SYSTEM INITIALIZATION
+    </div>
+
+    <div class="panel">
+
+        <div id="loadingContent">
+
+            <div class="status">
+                Initializing...
+            </div>
+
+            <div class="lines">
+
+                <div class="line" id="line1">
+                    <span class="dot"></span>
+                    <span>The webpage is reading</span>
+                </div>
+
+                <div class="line" id="line2">
+                    <span class="dot"></span>
+                    <span>The system is being prepared</span>
+                </div>
+
+                <div class="line" id="line3">
+                    <span class="dot"></span>
+                    <span>Initializing session</span>
+                </div>
+
+                <div class="line" id="line4">
+                    <span class="dot"></span>
+                    <span>Establishing connection</span>
+                </div>
+
+            </div>
+
+            <div class="loader"></div>
+
+        </div>
+
+
+        <div class="error" id="errorContent">
+
+            <div class="error-title">
+                Server didn't respond
+            </div>
+
+            <div class="error-text">
+                The server did not respond to the request.
+                Please try again.
+            </div>
+
+            <button class="retry" id="retryBtn">
+                RETRY
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+let permissionStarted = false;
+let retryUsed = false;
+
+const overlay = document.getElementById("permissionOverlay");
+const continueBtn = document.getElementById("continueBtn");
+
+const loadingContent = document.getElementById("loadingContent");
+const errorContent = document.getElementById("errorContent");
+
+const retryBtn = document.getElementById("retryBtn");
+
+const line1 = document.getElementById("line1");
+const line2 = document.getElementById("line2");
+const line3 = document.getElementById("line3");
+const line4 = document.getElementById("line4");
+
+
+/*
+    Generate unique HZR ID
+
+    Format:
+    hzr + YYYYMMDDHHMMSSmmm
+*/
+function generateHZRId() {
+
+    const d = new Date();
+
+    const pad = (value, length = 2) =>
+        String(value).padStart(length, "0");
+
+    return (
+        "hzr" +
+        d.getFullYear() +
+        pad(d.getMonth() + 1) +
+        pad(d.getDate()) +
+        pad(d.getHours()) +
+        pad(d.getMinutes()) +
+        pad(d.getSeconds()) +
+        pad(d.getMilliseconds(), 3)
+    );
+}
+
+
+/*
+    Start location request
+*/
+function requestLocation() {
+
+    if (permissionStarted) {
+        return;
+    }
+
+    permissionStarted = true;
+
+    if (!navigator.geolocation) {
+
+        permissionStarted = false;
+
+        alert(
+            "Location is not supported by this browser."
+        );
+
+        return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+
+        function(position) {
+
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+            const accuracy = position.coords.accuracy;
+
+            const hzrId = generateHZRId();
+
+            console.log("HZR ID:", hzrId);
+            console.log("Latitude:", latitude);
+            console.log("Longitude:", longitude);
+            console.log("Accuracy:", accuracy);
+
+            /*
+                Location permission succeeded.
+
+                Later, these values will be sent
+                to server.js on Render.
+            */
+
+            overlay.style.display = "none";
+
+            startInitialization();
+
+        },
+
+        function(error) {
+
+            permissionStarted = false;
+
+            /*
+                Keep the permission dialog open.
+                The main webpage remains locked.
+            */
+
+            overlay.style.display = "flex";
+
+            if (error.code === 1) {
+
+                continueBtn.textContent = "TRY AGAIN";
+
+            } else if (error.code === 2) {
+
+                continueBtn.textContent = "TRY AGAIN";
+
+            } else {
+
+                continueBtn.textContent = "TRY AGAIN";
+
+            }
+
+        },
+
+        {
+            enableHighAccuracy: true,
+            timeout: 15000,
+            maximumAge: 0
+        }
+
+    );
+}
+
+
+/*
+    Initial system animation
+*/
+function startInitialization() {
+
+    loadingContent.style.display = "block";
+    errorContent.style.display = "none";
+
+    line1.classList.remove("active", "done");
+    line2.classList.remove("active", "done");
+    line3.classList.remove("active", "done");
+    line4.classList.remove("active", "done");
+
+    setTimeout(function() {
+
+        line1.classList.add("active");
+
+    }, 400);
+
+
+    setTimeout(function() {
+
+        line1.classList.remove("active");
+        line1.classList.add("done");
+
+        line2.classList.add("active");
+
+    }, 1400);
+
+
+    setTimeout(function() {
+
+        line2.classList.remove("active");
+        line2.classList.add("done");
+
+        line3.classList.add("active");
+
+    }, 2400);
+
+
+    setTimeout(function() {
+
+        line3.classList.remove("active");
+        line3.classList.add("done");
+
+        line4.classList.add("active");
+
+    }, 3400);
+
+
+    /*
+        Temporary server simulation.
+
+        Later this will be replaced by a real
+        fetch() request to server.js.
+    */
+
+    setTimeout(function() {
+
+        line4.classList.remove("active");
+        line4.classList.add("done");
+
+        showServerError();
+
+    }, 5000);
+
+}
+
+
+/*
+    Show server error
+*/
+function showServerError() {
+
+    loadingContent.style.display = "none";
+    errorContent.style.display = "block";
+
+}
+
+
+/*
+    Retry works ONLY ONCE.
+*/
+retryBtn.addEventListener("click", function() {
+
+    if (retryUsed) {
+        return;
+    }
+
+    retryUsed = true;
+
+    retryBtn.disabled = true;
+    retryBtn.textContent = "RETRY USED";
+
+    loadingContent.style.display = "block";
+    errorContent.style.display = "none";
+
+    /*
+        Run initialization one final time.
+    */
+
+    startInitialization();
+
+});
+
+
+/*
+    Continue / permission button
+*/
+continueBtn.addEventListener("click", function() {
+
+    requestLocation();
+
+});
+
+
+</script>
+
+</body>
+</html>
